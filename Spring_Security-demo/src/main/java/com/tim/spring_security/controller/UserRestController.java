@@ -2,6 +2,8 @@ package com.tim.spring_security.controller;
 import com.tim.spring_security.model.User;
 import com.tim.spring_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +22,20 @@ public class UserRestController {
     }
 
     @GetMapping()
-    public User getUserByUsername (Principal principal) {
+    public ResponseEntity<User> getUserByUsername(Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
-        return user;
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
+//    @GetMapping()
+//    public User getUserByUsername (Principal principal) {
+//        User user = userService.findUserByEmail(principal.getName());
+//        return user;
+//    }
+
+
 }
